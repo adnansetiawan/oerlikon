@@ -32,7 +32,7 @@ namespace Oerlikon.Core.Services
         {
             var existingUser = await _dbContext.Users.FirstOrDefaultAsync(x => x.Email == request.Email && x.Status == Core.Constants.UserStatus.Active);
             if (existingUser != null)
-                throw new Core.Exceptions.AuthException("email sudah terdaftar, gunakan email lain atau login");
+                throw new Core.Exceptions.AuthException("email already registered");
             var salt = Commons.SecurityHelper.GenerateSalt(70);
             var hashedPassword = Commons.SecurityHelper.HashUsingSalt(request.Password, salt, 10101, salt.Length);
             var user = new Core.Databases.User
