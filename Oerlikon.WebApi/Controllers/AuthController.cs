@@ -20,13 +20,24 @@ namespace Oerlikon.WebApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationApiRequest request)
         {
-            var response = await _userRegisterService.Register(new Core.Models.Users.UserRegisterRequest
+            try
             {
-                 Email = request.Email,
-                 Name = request.Name,
-                 Password = request.Password
-            });
-            return Ok(response);
+                var response = await _userRegisterService.Register(new Core.Models.Users.UserRegisterRequest
+                {
+                    Email = request.Email,
+                    Name = request.Name,
+                    Password = request.Password
+                });
+                return Ok(response);
+            }
+            catch (Core.Exceptions.AuthException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
 
         [HttpPost("login")]
