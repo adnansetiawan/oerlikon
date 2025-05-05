@@ -1,0 +1,6 @@
+@Oerlikon.WebApi_HostAddress = http://localhost:5011
+
+GET {{Oerlikon.WebApi_HostAddress}}
+Accept: application/json
+
+###
