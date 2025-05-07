@@ -1,0 +1,69 @@
+﻿	@rendermode InteractiveServer
+@page "/vehicles"
+@using Oerlikon.BlazorWebApp.Models
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Grids
+@inject IHttpClientFactory httpClientFactory
+
+<h3>Vehicles</h3>
+
+@if (vehicles == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @* <table class="table">
+        <thead>
+            <tr>
+                <th>Plate No</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vehicle in vehicles)
+            {
+                <tr>
+                    <td>@vehicle.PlateNo</td>
+                    <td></td>
+
+                </tr>
+            }
+        </tbody>
+    </table> *@
+    <Syncfusion.Blazor.Grids.SfGrid DataSource="@vehicles" AllowPaging="true" AllowFiltering="true">
+        <Syncfusion.Blazor.Grids.GridPageSettings PageSize="3"></Syncfusion.Blazor.Grids.GridPageSettings>
+        <Syncfusion.Blazor.Grids.GridColumns>
+            <Syncfusion.Blazor.Grids.GridColumn Field=@nameof(VehicleViewModel.PlateNo) HeaderText="Plate No" Width="150"></Syncfusion.Blazor.Grids.GridColumn>
+        </Syncfusion.Blazor.Grids.GridColumns>
+    </Syncfusion.Blazor.Grids.SfGrid>
+}
+
+@code {
+    private List<VehicleViewModel>? vehicles;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var httpClient = httpClientFactory.CreateClient();
+        httpClient.BaseAddress = new Uri("https://localhost:7082");
+        vehicles = await httpClient.GetFromJsonAsync<List<VehicleViewModel>>("api/vehicles");
+
+    }
+    private async Task LoadData(ActionEventArgs<VehicleViewModel> args)
+    {
+        if (args.RequestType == Syncfusion.Blazor.Grids.Action.Refresh || args.RequestType == Syncfusion.Blazor.Grids.Action.Paging)
+        {
+            var httpClient = httpClientFactory.CreateClient();
+            httpClient.BaseAddress = new Uri("https://localhost:7082");
+            vehicles = await httpClient.GetFromJsonAsync<List<VehicleViewModel>>("api/vehicles");
+       
+            await Task.FromResult(new DataResult()
+                {
+                    Result = vehicles,
+                    Count = vehicles.Count
+                });
+        }
+    }
+}

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oerlikon.Core", "..\Oerliko
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oerlikon.WebApi.Tests", "..\Oerlikon.WebApi.Tests\Oerlikon.WebApi.Tests.csproj", "{29DC84A9-75A1-4A3F-A79D-382A706BCABD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oerlikon.BlazorWebApp", "..\Oerlikon.BlazorWebApp\Oerlikon.BlazorWebApp.csproj", "{70C6A735-AD50-4114-A5F4-6DAD6A9936B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{29DC84A9-75A1-4A3F-A79D-382A706BCABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29DC84A9-75A1-4A3F-A79D-382A706BCABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29DC84A9-75A1-4A3F-A79D-382A706BCABD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70C6A735-AD50-4114-A5F4-6DAD6A9936B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70C6A735-AD50-4114-A5F4-6DAD6A9936B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70C6A735-AD50-4114-A5F4-6DAD6A9936B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70C6A735-AD50-4114-A5F4-6DAD6A9936B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

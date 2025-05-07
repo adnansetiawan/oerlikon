@@ -21,8 +21,10 @@ builder.Services.AddDbContext<Oerlikon.Core.Databases.DatabaseContext>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddSingleton<IAppSetting, AppSetting>();
-builder.Services.AddScoped<Oerlikon.Core.Interfaces.IUserRegisterService, Oerlikon.Core.Services.UserRegisterService>();
-builder.Services.AddScoped<Oerlikon.Core.Interfaces.IAuthService, Oerlikon.Core.Services.AuthService>();
+builder.Services.AddScoped<IUserRegisterService, Oerlikon.Core.Services.UserRegisterService>();
+builder.Services.AddScoped<IAuthService, Oerlikon.Core.Services.AuthService>();
+builder.Services.AddScoped<IVehicleService, Oerlikon.Core.Services.VehicleService>();
+
 var appSetting = new AppSetting(builder.Configuration);
 var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(appSetting.JwtSecretKey));
 builder.Services.AddAuthentication(x =>
