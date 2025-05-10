@@ -11,5 +11,11 @@ namespace Oerlikon.Core.Interfaces
     public interface IVehicleService
     {
         Task<List<VehicleResponse>> GetVehicles(GetAllVehicleRequest request);
+
+        Task SubmitVehicle(SubmitVehicleRequest request);
+
+        Task<VehicleDetailResponse> GetDetail(Guid uid);
+
+
     }
 }

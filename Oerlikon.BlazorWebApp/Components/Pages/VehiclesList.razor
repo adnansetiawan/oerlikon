@@ -5,7 +5,7 @@
 @using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor.Grids
 @inject IHttpClientFactory httpClientFactory
-
+@inject NavigationManager Navigation
 <h3>Vehicles</h3>
 
 @if (vehicles == null)
@@ -32,10 +32,16 @@ else
             }
         </tbody>
     </table> *@
-    <Syncfusion.Blazor.Grids.SfGrid DataSource="@vehicles" AllowPaging="true" AllowFiltering="true">
+    <div>
+        <button class="btn-primary" @onclick="AddNew">Add</button>
+    </div>
+    <Syncfusion.Blazor.Grids.SfGrid DataSource="@vehicles"
+    AllowPaging="true" AllowFiltering="true">
+        <Syncfusion.Blazor.Grids.GridEvents OnRecordClick="RecordClickHandler" TValue="VehicleViewModel"></Syncfusion.Blazor.Grids.GridEvents>
         <Syncfusion.Blazor.Grids.GridPageSettings PageSize="3"></Syncfusion.Blazor.Grids.GridPageSettings>
         <Syncfusion.Blazor.Grids.GridColumns>
-            <Syncfusion.Blazor.Grids.GridColumn Field=@nameof(VehicleViewModel.PlateNo) HeaderText="Plate No" Width="150"></Syncfusion.Blazor.Grids.GridColumn>
+            <Syncfusion.Blazor.Grids.GridColumn   Field=@nameof(VehicleViewModel.PlateNo) HeaderText="Plate No" Width="150"></Syncfusion.Blazor.Grids.GridColumn>
+            <Syncfusion.Blazor.Grids.GridColumn Field=@nameof(VehicleViewModel.Brand) HeaderText="Brand" Width="150"></Syncfusion.Blazor.Grids.GridColumn>
         </Syncfusion.Blazor.Grids.GridColumns>
     </Syncfusion.Blazor.Grids.SfGrid>
 }
@@ -51,19 +57,14 @@ else
         vehicles = await httpClient.GetFromJsonAsync<List<VehicleViewModel>>("api/vehicles");
 
     }
-    private async Task LoadData(ActionEventArgs<VehicleViewModel> args)
+    private async Task RecordClickHandler(RecordClickEventArgs<VehicleViewModel> args)
     {
-        if (args.RequestType == Syncfusion.Blazor.Grids.Action.Refresh || args.RequestType == Syncfusion.Blazor.Grids.Action.Paging)
-        {
-            var httpClient = httpClientFactory.CreateClient();
-            httpClient.BaseAddress = new Uri("https://localhost:7082");
-            vehicles = await httpClient.GetFromJsonAsync<List<VehicleViewModel>>("api/vehicles");
-       
-            await Task.FromResult(new DataResult()
-                {
-                    Result = vehicles,
-                    Count = vehicles.Count
-                });
-        }
+        var data = args.RowData;
+        Navigation.NavigateTo($"/vehicle?uid={data.Uid}");
+    }
+
+    private async Task AddNew()
+    {
+        Navigation.NavigateTo($"/vehicle");
     }
 }

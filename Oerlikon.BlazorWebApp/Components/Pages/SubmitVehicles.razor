@@ -1,0 +1,75 @@
+﻿@rendermode InteractiveServer
+@page "/vehicle"
+@using Oerlikon.BlazorWebApp.Models
+@using System.Text
+@inject IHttpClientFactory httpClientFactory
+
+<h3>Submit Vehicles</h3>
+
+
+
+<EditForm Model="@vehicle" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="text-danger" />
+
+    <div class="mb-3">
+        <label for="plate-no" class="form-label">Plate No</label>
+        <InputText id="plate-no" class="form-control" @bind-Value="vehicle.PlateNo" />
+        <ValidationMessage For="@(() => vehicle.PlateNo)" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label for="brand" class="form-label">Brand</label>
+        <InputSelect id="brand" class="form-select" @bind-Value="vehicle.Brand">
+            <option value="">-- Select --</option>
+            @foreach (var brand in Brands)
+            {
+                <option value="@brand">@brand</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="mb-3">
+        <label for="color" class="form-label">Color</label>
+        <InputSelect id="color" class="form-select" @bind-Value="vehicle.Color">
+            <option value="">-- Select --</option>
+            @foreach (var color in Colors)
+            {
+                <option value="@color">@color</option>
+            }
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+
+@code {
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? Uid { get; set; }
+
+    private SubmitVehicleViewModel vehicle = new SubmitVehicleViewModel();
+
+    private string[] Brands = new string[] { "Toyota", "Honda", "Suzuki" };
+    private string[] Colors = new string[] { "Black", "White", "Grey", "Red", "Blue" };
+    HttpClient httpClient;
+    protected override async Task OnInitializedAsync()
+    {
+        httpClient = httpClientFactory.CreateClient();
+        httpClient.BaseAddress = new Uri("https://localhost:7082");
+        if (Uid != null)
+        {
+            vehicle = await httpClient.GetFromJsonAsync<SubmitVehicleViewModel>($"api/vehicles/{Uid}");
+        }
+    }
+    private async Task HandleValidSubmit()
+    {
+        var json = Newtonsoft.Json.JsonConvert.SerializeObject(vehicle);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await httpClient.PostAsync("/api/vehicles", content);
+
+    }
+    
+}

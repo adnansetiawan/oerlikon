@@ -19,11 +19,7 @@ namespace Oerlikon.Core.Databases
         public string Brand { get; set; }
         public string Color { get; set; }
 
-        [Column("created_by")]
-        [ForeignKey("CreatedByUser")]
-        public Guid CreatedBy { get; set; }
-
-        public User? CreatedByUser { get; set; }
+        
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
