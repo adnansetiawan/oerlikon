@@ -1,5 +1,6 @@
 1. Preparing Database
-   CREATE TABLE [dbo].[users](
+
+CREATE TABLE [dbo].[users](
 	[uid] [uniqueidentifier] NOT NULL,
 	[name] [varchar](50) NOT NULL,
 	[email] [nvarchar](150) NOT NULL,
