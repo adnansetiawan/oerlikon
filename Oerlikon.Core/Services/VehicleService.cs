@@ -83,5 +83,15 @@ namespace Oerlikon.Core.Services
                  Uid= existingData.UID
             };
         }
+
+        public async Task DeleteVehicle(Guid id)
+        {
+            var existingData = await _dbContext.Vehicles.FirstOrDefaultAsync(x => x.UID == id);
+            if (existingData != null)
+            {
+                _dbContext.Vehicles.Remove(existingData);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
     }
 }

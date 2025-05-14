@@ -16,6 +16,6 @@ namespace Oerlikon.Core.Interfaces
 
         Task<VehicleDetailResponse> GetDetail(Guid uid);
 
-
+        Task DeleteVehicle(Guid id);
     }
 }

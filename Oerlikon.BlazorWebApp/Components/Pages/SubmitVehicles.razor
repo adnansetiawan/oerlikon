@@ -3,7 +3,7 @@
 @using Oerlikon.BlazorWebApp.Models
 @using System.Text
 @inject IHttpClientFactory httpClientFactory
-
+@inject NavigationManager Navigation
 <h3>Submit Vehicles</h3>
 
 
@@ -29,6 +29,12 @@
         </InputSelect>
     </div>
     <div class="mb-3">
+        <input class="form-check-input" type="checkbox" value="" id="deleteCheck" @bind="isDeleted">
+        <label class="form-check-label" for="defaultCheck1">
+            Deleted
+        </label>
+    </div>
+    <div class="mb-3">
         <label for="color" class="form-label">Color</label>
         <InputSelect id="color" class="form-select" @bind-Value="vehicle.Color">
             <option value="">-- Select --</option>
@@ -50,7 +56,7 @@
     public string? Uid { get; set; }
 
     private SubmitVehicleViewModel vehicle = new SubmitVehicleViewModel();
-
+    private bool isDeleted = false;
     private string[] Brands = new string[] { "Toyota", "Honda", "Suzuki" };
     private string[] Colors = new string[] { "Black", "White", "Grey", "Red", "Blue" };
     HttpClient httpClient;
@@ -65,11 +71,21 @@
     }
     private async Task HandleValidSubmit()
     {
-        var json = Newtonsoft.Json.JsonConvert.SerializeObject(vehicle);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        if (isDeleted)
+        {
+            if (Uid != null)
+            {
+                HttpResponseMessage response = await httpClient.DeleteAsync($"/api/vehicles/{Uid}");
+            }
+        }
+        else
+        {
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(vehicle);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        HttpResponseMessage response = await httpClient.PostAsync("/api/vehicles", content);
-
+            HttpResponseMessage response = await httpClient.PostAsync("/api/vehicles", content);
+        }
+        Navigation.NavigateTo($"/vehicles");
     }
     
 }

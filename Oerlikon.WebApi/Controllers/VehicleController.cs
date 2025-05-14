@@ -66,5 +66,22 @@ namespace Oerlikon.WebApi.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+        [HttpDelete("{uid}")]
+        public async Task<IActionResult> DeleteVehicle([FromRoute] Guid uid)
+        {
+            try
+            {
+                await _vehicleService.DeleteVehicle(uid);
+                return Ok();
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An unexpected error occurred. {ex.Message}");
+            }
+        }
     }
 }
